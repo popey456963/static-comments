@@ -24,15 +24,6 @@ block content
             .col-sm-7
               input.form-control(type='text', name='name', id='name', value=user.name)
           .form-group
-            label.col-sm-3 Gender
-            .col-sm-4
-              label.radio-inline.radio.col-sm-4
-                input(type='radio', checked=(user.gender == 'male'), name='gender', value='male', data-toggle='radio')
-                span Male
-              label.radio-inline.col-sm-4
-                input(type='radio', checked=(user.gender == 'female'), name='gender', value='female', data-toggle='radio')
-                span Female
-          .form-group
             label.col-sm-3(for='location') Location
             .col-sm-7
               input.form-control(type='text', name='location', id='location', value=user.location)
@@ -63,6 +54,18 @@ block content
           .form-group
             .col-sm-4.col-sm-offset-3
               button.btn.btn-success(type='submit') Change Password
+
+    .panel
+      .panel-body
+        form.form-horizontal(method='POST', action='/api/v1/exportData')
+          legend Programmatic Access
+          .form-group
+            label.col-sm-3(for='key') API Key
+            .col-sm-7
+              input.form-control(type='key', name='key', id='key', value=user.key, readonly)
+          .form-group
+            .col-sm-offset-3.col-sm-4
+              button.btn.btn-success(type='submit') Export Data
 
     .panel
       .panel-body

@@ -1,5 +1,6 @@
+const mongoose = require('mongoose')
 const MessageSchema = require('./Message')
-const UserSchema = require('./User')
+const UserSchema = require('./User').Schema
 
 const PageSchema = mongoose.Schema({
   owner: UserSchema,

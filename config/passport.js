@@ -4,7 +4,7 @@ var FacebookStrategy = require('passport-facebook').Strategy
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 var GithubStrategy = require('passport-github').Strategy
 
-var User = require('../models/User')
+var User = require('../models/User').Model
 
 passport.serializeUser(function (user, done) {
   done(null, user.id)

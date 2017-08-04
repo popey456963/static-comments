@@ -1,5 +1,6 @@
+const mongoose = require('mongoose')
 const PageSchema = require('./Page')
-const UserSchema = require('./User')
+const UserSchema = require('./User').Schema
 
 const WebsiteSchema = mongoose.Schema({
   owner: UserSchema,
@@ -11,3 +12,5 @@ const WebsiteSchema = mongoose.Schema({
 })
 
 const Website = mongoose.model('Website', WebsiteSchema)
+
+module.exports = Website

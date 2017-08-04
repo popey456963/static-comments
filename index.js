@@ -15,10 +15,28 @@ const MongoStore = require('connect-mongo')(session)
 // Load environment variables from .env file
 dotenv.load()
 
+// Error Printing
+const pe = require('pretty-error').start()
+pe.appendStyle({
+  'pretty-error > trace > item > footer > addr': {
+      display: 'none'
+  },
+  'pretty-error > trace > item > footer': {
+    display: 'block'
+  },
+  'pretty-error > trace > item': {
+    display: 'block',
+    marginBottom: 0,
+    marginLeft: 2,
+    bullet: '"<grey>-</grey>"'
+  }
+})
+
 // Controllers
 const HomeController = require('./controllers/home')
 const UserController = require('./controllers/user')
 const ContactController = require('./controllers/contact')
+const AdminController = require('./controllers/admin')
 
 // Passport OAuth strategies
 require('./config/passport')
@@ -53,10 +71,17 @@ app.use(function (req, res, next) {
   next()
 })
 app.use(express.static(path.join(__dirname, 'public')))
+app.use((req, res, next) => {
+  if (req.body && req.body.key) req.key = req.body.key
+  if (req.params && req.params.key) req.key = req.params.key
+  if (req.user && req.user.key) req.key = req.user.key
+  next()
+})
 
 app.get('/', HomeController.index)
 app.get('/contact', ContactController.contactGet)
 app.post('/contact', ContactController.contactPost)
+app.get('/admin', AdminController.adminGet)
 app.get('/account', UserController.ensureAuthenticated, UserController.accountGet)
 app.put('/account', UserController.ensureAuthenticated, UserController.accountPut)
 app.delete('/account', UserController.ensureAuthenticated, UserController.accountDelete)
@@ -76,6 +101,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: 'profile email'
 app.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }))
 app.get('/auth/github', passport.authenticate('github', { scope: [ 'user:email profile repo' ] }))
 app.get('/auth/github/callback', passport.authenticate('github', { successRedirect: '/', failureRedirect: '/login' }))
+app.use((req, res, next) => { let err = new Error(); err.status = 404; next(err) })
 
 // Production error handler
 if (app.get('env') === 'production') {
