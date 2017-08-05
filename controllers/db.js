@@ -1,12 +1,28 @@
-// const mongoose = require('mongoose')
-// mongoose.connect('mongodb://localhost/static-comments')
-//
-// mongoose.connection.on('error', console.error.bind(console, 'connection error:'))
-// mongoose.connection.once('open', () => { console.log('connected to db') })
+const Project = require('../models/Project')
 
-const Website = require('../models/Website')
-
-module.exports.listPages = (key) => {
-  // We can assume key exists here.
-  return Website.findOne({ 'owner.key': key }).exec()
+function createProject(user, settings) {
+  let project = new Project({
+    owner: new User(user),
+    pages: [],
+    settings: settings
+  })
+  project.save()
 }
+
+function readProjects(key) {
+  return Project.find({ 'owner.key': key }).exec()
+}
+
+function readProject(id) {
+  return Project.find({ '_id': id }).exec()
+}
+
+function updateProject(id, update) {
+  return Project.update({ '_id': id }, update).exec()
+}
+
+function removeProject(id) {
+  return Project.remove({ '_id': id }).exec()
+}
+
+module.exports = { createProject, readProjects, readProject, updateProject, removeProject }
