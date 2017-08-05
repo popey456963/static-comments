@@ -10,4 +10,7 @@ exports.adminGet = async (req, res, next) => {
   res.render('admin', {
     title: 'Admin',
     pages: await db.listPages(req.key)
-  })}
+  })
+}
+
+db.listPages('abc').then((result) => { console.log(result) })

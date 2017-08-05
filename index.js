@@ -72,9 +72,11 @@ app.use(function (req, res, next) {
 })
 app.use(express.static(path.join(__dirname, 'public')))
 app.use((req, res, next) => {
-  if (req.body && req.body.key) req.key = req.body.key
-  if (req.params && req.params.key) req.key = req.params.key
-  if (req.user && req.user.key) req.key = req.user.key
+  console.log('function run')
+  console.log(req.params)
+  if (req.body && req.body.key) { req.key = req.body.key; console.log('body') }
+  if (req.query && req.query.key) { req.key = req.query.key; console.log('query') }
+  if (req.user && req.user.key) { req.key = req.user.key; console.log('user') }
   next()
 })
 
@@ -101,7 +103,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: 'profile email'
 app.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }))
 app.get('/auth/github', passport.authenticate('github', { scope: [ 'user:email profile repo' ] }))
 app.get('/auth/github/callback', passport.authenticate('github', { successRedirect: '/', failureRedirect: '/login' }))
-app.use((req, res, next) => { let err = new Error(); err.status = 404; next(err) })
+app.use((req, res, next) => { res.status(404).send('Error, not found.') })
 
 // Production error handler
 if (app.get('env') === 'production') {
